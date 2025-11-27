@@ -14,7 +14,232 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      jobs: {
+        Row: {
+          completed_date: string | null
+          created_at: string
+          deposit_amount: number
+          id: string
+          pricing_details: Json
+          property_id: string
+          provider_id: string
+          scheduled_date: string | null
+          service_type: Database["public"]["Enums"]["service_type"]
+          status: Database["public"]["Enums"]["job_status"]
+          stripe_checkout_session_id: string | null
+          stripe_payment_intent_id: string | null
+          total_amount: number
+          updated_at: string
+        }
+        Insert: {
+          completed_date?: string | null
+          created_at?: string
+          deposit_amount: number
+          id?: string
+          pricing_details: Json
+          property_id: string
+          provider_id: string
+          scheduled_date?: string | null
+          service_type: Database["public"]["Enums"]["service_type"]
+          status?: Database["public"]["Enums"]["job_status"]
+          stripe_checkout_session_id?: string | null
+          stripe_payment_intent_id?: string | null
+          total_amount: number
+          updated_at?: string
+        }
+        Update: {
+          completed_date?: string | null
+          created_at?: string
+          deposit_amount?: number
+          id?: string
+          pricing_details?: Json
+          property_id?: string
+          provider_id?: string
+          scheduled_date?: string | null
+          service_type?: Database["public"]["Enums"]["service_type"]
+          status?: Database["public"]["Enums"]["job_status"]
+          stripe_checkout_session_id?: string | null
+          stripe_payment_intent_id?: string | null
+          total_amount?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobs_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "property_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jobs_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          id: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      property_profiles: {
+        Row: {
+          address: string
+          bathrooms: number | null
+          bedrooms: number | null
+          city: string
+          created_at: string
+          id: string
+          lot_size: number | null
+          pool_size: string | null
+          pool_type: string | null
+          square_feet: number | null
+          updated_at: string
+          user_id: string
+          zip_code: string
+        }
+        Insert: {
+          address: string
+          bathrooms?: number | null
+          bedrooms?: number | null
+          city: string
+          created_at?: string
+          id?: string
+          lot_size?: number | null
+          pool_size?: string | null
+          pool_type?: string | null
+          square_feet?: number | null
+          updated_at?: string
+          user_id: string
+          zip_code: string
+        }
+        Update: {
+          address?: string
+          bathrooms?: number | null
+          bedrooms?: number | null
+          city?: string
+          created_at?: string
+          id?: string
+          lot_size?: number | null
+          pool_size?: string | null
+          pool_type?: string | null
+          square_feet?: number | null
+          updated_at?: string
+          user_id?: string
+          zip_code?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      providers: {
+        Row: {
+          business_name: string
+          cities: string[]
+          created_at: string
+          id: string
+          insurance_verified: boolean
+          pricing_tier: Database["public"]["Enums"]["pricing_tier"]
+          rating: number | null
+          services: Database["public"]["Enums"]["service_type"][]
+          status: Database["public"]["Enums"]["provider_status"]
+          total_reviews: number | null
+          updated_at: string
+          user_id: string
+          years_experience: number
+        }
+        Insert: {
+          business_name: string
+          cities: string[]
+          created_at?: string
+          id?: string
+          insurance_verified?: boolean
+          pricing_tier?: Database["public"]["Enums"]["pricing_tier"]
+          rating?: number | null
+          services: Database["public"]["Enums"]["service_type"][]
+          status?: Database["public"]["Enums"]["provider_status"]
+          total_reviews?: number | null
+          updated_at?: string
+          user_id: string
+          years_experience?: number
+        }
+        Update: {
+          business_name?: string
+          cities?: string[]
+          created_at?: string
+          id?: string
+          insurance_verified?: boolean
+          pricing_tier?: Database["public"]["Enums"]["pricing_tier"]
+          rating?: number | null
+          services?: Database["public"]["Enums"]["service_type"][]
+          status?: Database["public"]["Enums"]["provider_status"]
+          total_reviews?: number | null
+          updated_at?: string
+          user_id?: string
+          years_experience?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "providers_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["user_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["user_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["user_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +248,17 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      job_status:
+        | "pending_deposit"
+        | "confirmed"
+        | "in_progress"
+        | "completed"
+        | "paid"
+        | "cancelled"
+      pricing_tier: "budget" | "standard" | "premium"
+      provider_status: "pending" | "approved" | "suspended"
+      service_type: "cleaning" | "landscaping" | "pool"
+      user_role: "customer" | "provider" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +385,19 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      job_status: [
+        "pending_deposit",
+        "confirmed",
+        "in_progress",
+        "completed",
+        "paid",
+        "cancelled",
+      ],
+      pricing_tier: ["budget", "standard", "premium"],
+      provider_status: ["pending", "approved", "suspended"],
+      service_type: ["cleaning", "landscaping", "pool"],
+      user_role: ["customer", "provider", "admin"],
+    },
   },
 } as const
