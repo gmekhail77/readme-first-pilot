@@ -8,6 +8,8 @@ import Cleaning from "./pages/Cleaning";
 import Landscaping from "./pages/Landscaping";
 import Pool from "./pages/Pool";
 import BookingReview from "./pages/BookingReview";
+import BookingCheckout from "./pages/BookingCheckout";
+import BookingConfirmation from "./pages/BookingConfirmation";
 import ProviderLogin from "./pages/provider/Login";
 import ProviderRegister from "./pages/provider/Register";
 import NotFound from "./pages/NotFound";
@@ -26,6 +28,8 @@ const App = () => (
           <Route path="/landscaping" element={<Landscaping />} />
           <Route path="/pool" element={<Pool />} />
           <Route path="/booking/review" element={<BookingReview />} />
+          <Route path="/booking/checkout" element={<BookingCheckout />} />
+          <Route path="/booking/confirmation" element={<BookingConfirmation />} />
           <Route path="/provider/login" element={<ProviderLogin />} />
           <Route path="/provider/register" element={<ProviderRegister />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
