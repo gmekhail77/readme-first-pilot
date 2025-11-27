@@ -252,6 +252,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      user_owns_property: {
+        Args: { _property_id: string; _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       job_status:
