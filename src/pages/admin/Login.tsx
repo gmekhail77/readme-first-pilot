@@ -120,7 +120,7 @@ export default function AdminLogin() {
 
       // Success - redirect will happen via auth state listener
       toast.success("Welcome, Admin!");
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof z.ZodError) {
         const fieldErrors: Record<string, string> = {};
         error.issues.forEach((err) => {

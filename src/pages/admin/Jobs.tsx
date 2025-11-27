@@ -188,7 +188,7 @@ export default function AdminJobs() {
 
     setActionLoading(true);
     try {
-      const updateData: any = { status: newStatus };
+      const updateData: { status: string; completed_date?: string } = { status: newStatus };
 
       // Set completed_date if marking as completed
       if (newStatus === "completed") {

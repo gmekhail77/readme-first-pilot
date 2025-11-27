@@ -158,7 +158,7 @@ export default function ProviderDashboard() {
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, { variant: any; label: string }> = {
+    const variants: Record<string, { variant: "default" | "secondary" | "destructive" | "outline"; label: string }> = {
       pending_deposit: { variant: "secondary", label: "Pending Deposit" },
       confirmed: { variant: "default", label: "Confirmed" },
       in_progress: { variant: "default", label: "In Progress" },

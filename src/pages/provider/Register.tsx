@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -132,12 +133,12 @@ export default function ProviderRegister() {
       const { error: providerError } = await supabase.from("providers").insert([{
         user_id: authData.user.id,
         business_name: validatedData.businessName,
-        services: validatedData.services as any,
+        services: validatedData.services as Database["public"]["Enums"]["service_type"][],
         cities: validatedData.cities,
-        pricing_tier: validatedData.pricingTier as any,
+        pricing_tier: validatedData.pricingTier as Database["public"]["Enums"]["pricing_tier"],
         years_experience: validatedData.yearsExperience,
         insurance_verified: validatedData.insuranceVerified,
-        status: "pending" as any,
+        status: "pending" as Database["public"]["Enums"]["provider_status"],
       }]);
 
       if (providerError) {
@@ -156,7 +157,7 @@ export default function ProviderRegister() {
 
       toast.success("Application submitted! Admin will review within 24-48 hours.");
       navigate("/provider/login");
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof z.ZodError) {
         const fieldErrors: Record<string, string> = {};
         error.issues.forEach((err) => {

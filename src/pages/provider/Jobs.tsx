@@ -17,7 +17,7 @@ interface Job {
   status: string;
   total_amount: number;
   deposit_amount: number;
-  pricing_details: any;
+  pricing_details: Record<string, unknown>;
   scheduled_date: string | null;
   created_at: string;
   property: {
@@ -107,7 +107,7 @@ export default function ProviderJobs() {
 
   const handleStatusUpdate = async (jobId: string, newStatus: string) => {
     try {
-      const updates: any = { status: newStatus };
+      const updates: { status: string; completed_date?: string } = { status: newStatus };
       
       if (newStatus === "completed") {
         updates.completed_date = new Date().toISOString();

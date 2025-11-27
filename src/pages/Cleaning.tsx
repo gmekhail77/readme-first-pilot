@@ -170,7 +170,7 @@ export default function Cleaning() {
                   <Label htmlFor="frequency" className="text-lg">Service Frequency</Label>
                   <Select
                     value={formData.frequency}
-                    onValueChange={(value: any) => setFormData({ ...formData, frequency: value })}
+                    onValueChange={(value: 'one-time' | 'weekly' | 'bi-weekly' | 'monthly') => setFormData({ ...formData, frequency: value })}
                   >
                     <SelectTrigger id="frequency" className="h-12 text-lg mt-2">
                       <SelectValue />

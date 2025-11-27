@@ -140,7 +140,7 @@ export default function Landscaping() {
                   <Label htmlFor="terrain" className="text-lg">Terrain Type</Label>
                   <Select
                     value={formData.terrain}
-                    onValueChange={(value: any) => setFormData({ ...formData, terrain: value })}
+                    onValueChange={(value: 'flat' | 'sloped' | 'very_sloped') => setFormData({ ...formData, terrain: value })}
                   >
                     <SelectTrigger id="terrain" className="h-12 text-lg mt-2">
                       <SelectValue />
