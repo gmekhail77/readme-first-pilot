@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,8 +8,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Star, MapPin, Phone, Mail } from 'lucide-react';
+import { ArrowLeft, Star, MapPin, Loader2 } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils/format';
+import { toast } from 'sonner';
 import type { ServiceType } from '@/lib/constants';
 
 export default function BookingReview() {
@@ -31,6 +32,43 @@ export default function BookingReview() {
     email: '',
     phone: '',
     address: '',
+    zipCode: '',
+  });
+
+  // Property creation mutation
+  const createPropertyMutation = useMutation({
+    mutationFn: async (propertyData: {
+      userId: string;
+      address: string;
+      city: string;
+      zipCode: string;
+      squareFeet?: number;
+      bedrooms?: number;
+      bathrooms?: number;
+      lotSize?: number;
+      poolType?: string;
+      poolSize?: string;
+    }) => {
+      const { data, error } = await supabase
+        .from('property_profiles')
+        .insert({
+          user_id: propertyData.userId,
+          address: propertyData.address,
+          city: propertyData.city,
+          zip_code: propertyData.zipCode,
+          square_feet: propertyData.squareFeet,
+          bedrooms: propertyData.bedrooms,
+          bathrooms: propertyData.bathrooms,
+          lot_size: propertyData.lotSize,
+          pool_type: propertyData.poolType,
+          pool_size: propertyData.poolSize,
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
   });
 
   // Check if user is logged in
@@ -68,12 +106,12 @@ export default function BookingReview() {
         .single()
         .then(({ data }) => {
           if (data) {
-            setCustomerInfo({
+            setCustomerInfo((prev) => ({
+              ...prev,
               fullName: data.full_name || '',
               email: data.email || '',
               phone: data.phone || '',
-              address: '',
-            });
+            }));
           }
         });
     }
@@ -82,30 +120,82 @@ export default function BookingReview() {
   const depositAmount = totalAmount * 0.5;
   const remainingAmount = totalAmount * 0.5;
 
-  const handleProceedToPayment = () => {
-    // Prepare booking data for checkout
-    const checkoutParams = new URLSearchParams({
-      providerId: providerId || "",
-      propertyId: "temp-property-id", // TODO: Get from property creation
-      service: serviceType || "",
-      city: city || "",
-      total: totalAmount.toString(),
-      deposit: depositAmount.toString(),
-      tier: tier || "",
-      fullName: customerInfo.fullName,
-      email: customerInfo.email,
-      phone: customerInfo.phone,
-      address: customerInfo.address,
-    });
+  const validateForm = () => {
+    if (!customerInfo.fullName.trim()) {
+      toast.error('Please enter your full name');
+      return false;
+    }
+    if (!customerInfo.email.trim()) {
+      toast.error('Please enter your email');
+      return false;
+    }
+    if (!customerInfo.phone.trim()) {
+      toast.error('Please enter your phone number');
+      return false;
+    }
+    if (!customerInfo.address.trim()) {
+      toast.error('Please enter your service address');
+      return false;
+    }
+    if (!customerInfo.zipCode.trim()) {
+      toast.error('Please enter your zip code');
+      return false;
+    }
+    return true;
+  };
 
-    // Add service-specific details from searchParams
-    for (const [key, value] of searchParams.entries()) {
-      if (!['provider', 'service', 'city', 'total', 'tier'].includes(key)) {
-        checkoutParams.set(key, value);
-      }
+  const handleProceedToPayment = async () => {
+    if (!validateForm()) return;
+    if (!session?.user?.id) {
+      toast.error('Please sign in to continue');
+      return;
     }
 
-    navigate(`/booking/checkout?${checkoutParams.toString()}`);
+    try {
+      // Create property profile first
+      const propertyData = {
+        userId: session.user.id,
+        address: customerInfo.address,
+        city: city || '',
+        zipCode: customerInfo.zipCode,
+        // Include service-specific details
+        squareFeet: serviceDetails.squareFeet ? parseInt(serviceDetails.squareFeet) : undefined,
+        bedrooms: serviceDetails.bedrooms ? parseInt(serviceDetails.bedrooms) : undefined,
+        bathrooms: serviceDetails.bathrooms ? parseInt(serviceDetails.bathrooms) : undefined,
+        lotSize: serviceDetails.lotSize ? parseInt(serviceDetails.lotSize) : undefined,
+        poolType: serviceDetails.poolType || undefined,
+        poolSize: serviceDetails.poolSize || undefined,
+      };
+
+      const property = await createPropertyMutation.mutateAsync(propertyData);
+
+      // Prepare booking data for checkout with real property ID
+      const checkoutParams = new URLSearchParams({
+        providerId: providerId || "",
+        propertyId: property.id,
+        service: serviceType || "",
+        city: city || "",
+        total: totalAmount.toString(),
+        deposit: depositAmount.toString(),
+        tier: tier || "",
+        fullName: customerInfo.fullName,
+        email: customerInfo.email,
+        phone: customerInfo.phone,
+        address: customerInfo.address,
+      });
+
+      // Add service-specific details from searchParams
+      for (const [key, value] of searchParams.entries()) {
+        if (!['provider', 'service', 'city', 'total', 'tier'].includes(key)) {
+          checkoutParams.set(key, value);
+        }
+      }
+
+      navigate(`/booking/checkout?${checkoutParams.toString()}`);
+    } catch (error) {
+      console.error('Failed to create property:', error);
+      toast.error('Failed to save property details. Please try again.');
+    }
   };
 
   const getServiceLabel = () => {
@@ -322,7 +412,18 @@ export default function BookingReview() {
                       value={customerInfo.address}
                       onChange={(e) => setCustomerInfo({ ...customerInfo, address: e.target.value })}
                       className="h-12 text-lg mt-2"
-                      placeholder="123 Main St, Gilbert, AZ 85234"
+                      placeholder="123 Main St, Gilbert, AZ"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="zipCode" className="text-lg">Zip Code</Label>
+                    <Input
+                      id="zipCode"
+                      value={customerInfo.zipCode}
+                      onChange={(e) => setCustomerInfo({ ...customerInfo, zipCode: e.target.value })}
+                      className="h-12 text-lg mt-2"
+                      placeholder="85234"
+                      maxLength={10}
                     />
                   </div>
                 </div>
@@ -345,8 +446,16 @@ export default function BookingReview() {
                     onClick={handleProceedToPayment}
                     size="lg"
                     className="h-14 text-xl px-8 bg-primary hover:bg-primary-hover"
+                    disabled={createPropertyMutation.isPending}
                   >
-                    Proceed to Payment
+                    {createPropertyMutation.isPending ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      'Proceed to Payment'
+                    )}
                   </Button>
                 </div>
               </CardContent>
