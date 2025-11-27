@@ -123,7 +123,7 @@ export default function Pool() {
                   <Label htmlFor="poolType" className="text-lg">Pool Type</Label>
                   <Select
                     value={formData.poolType}
-                    onValueChange={(value: any) => setFormData({ ...formData, poolType: value })}
+                    onValueChange={(value: 'in-ground' | 'above-ground') => setFormData({ ...formData, poolType: value })}
                   >
                     <SelectTrigger id="poolType" className="h-12 text-lg mt-2">
                       <SelectValue />
@@ -140,7 +140,7 @@ export default function Pool() {
                   <Label htmlFor="poolSize" className="text-lg">Pool Size</Label>
                   <Select
                     value={formData.poolSize}
-                    onValueChange={(value: any) => setFormData({ ...formData, poolSize: value })}
+                    onValueChange={(value: 'small' | 'medium' | 'large') => setFormData({ ...formData, poolSize: value })}
                   >
                     <SelectTrigger id="poolSize" className="h-12 text-lg mt-2">
                       <SelectValue />
@@ -158,7 +158,7 @@ export default function Pool() {
                   <Label htmlFor="frequency" className="text-lg">Service Frequency</Label>
                   <Select
                     value={formData.frequency}
-                    onValueChange={(value: any) => setFormData({ ...formData, frequency: value })}
+                    onValueChange={(value: 'weekly' | 'bi-weekly') => setFormData({ ...formData, frequency: value })}
                   >
                     <SelectTrigger id="frequency" className="h-12 text-lg mt-2">
                       <SelectValue />

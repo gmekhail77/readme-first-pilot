@@ -17,7 +17,7 @@ interface JobDetail {
   status: string;
   total_amount: number;
   deposit_amount: number;
-  pricing_details: any;
+  pricing_details: Record<string, unknown>;
   scheduled_date: string | null;
   completed_date: string | null;
   created_at: string;
@@ -114,7 +114,7 @@ export default function JobDetail() {
     if (!job) return;
 
     try {
-      const updates: any = { status: newStatus };
+      const updates: { status: string; completed_date?: string } = { status: newStatus };
       
       if (newStatus === "completed") {
         updates.completed_date = new Date().toISOString();
@@ -165,7 +165,7 @@ export default function JobDetail() {
   };
 
   const getStatusBadge = (status: string) => {
-    const variants: Record<string, { variant: any; label: string }> = {
+    const variants: Record<string, { variant: "default" | "secondary" | "destructive" | "outline"; label: string }> = {
       pending_deposit: { variant: "secondary", label: "Pending Deposit" },
       confirmed: { variant: "default", label: "Confirmed" },
       in_progress: { variant: "default", label: "In Progress" },

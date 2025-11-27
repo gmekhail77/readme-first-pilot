@@ -49,7 +49,7 @@ const BookingConfirmation = () => {
         
         // Show success toast
         toast.success("Booking confirmed! Provider will contact you soon.");
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("[CONFIRMATION] Error:", err);
         toast.error("Failed to load booking details");
       } finally {

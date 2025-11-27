@@ -75,9 +75,10 @@ const BookingCheckout = () => {
 
         // Redirect to Stripe Checkout
         window.location.href = data.url;
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("[CHECKOUT] Error:", err);
-        setError(err.message || "Failed to create checkout session");
+        const errorMessage = err instanceof Error ? err.message : "Failed to create checkout session";
+        setError(errorMessage);
         setIsProcessing(false);
         toast.error("Payment processing failed. Please try again.");
       }

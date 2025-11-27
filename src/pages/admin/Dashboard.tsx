@@ -124,7 +124,7 @@ export default function AdminDashboard() {
 
       // Jobs by city
       const cityMap = new Map<string, number>();
-      jobs?.forEach((job: any) => {
+      jobs?.forEach((job: { property_profiles: { city: string } | null }) => {
         const city = job.property_profiles?.city;
         if (city) {
           cityMap.set(city, (cityMap.get(city) || 0) + 1);
@@ -176,7 +176,7 @@ export default function AdminDashboard() {
         .order("completed_date", { ascending: false })
         .limit(5);
 
-      recentJobs?.forEach((job: any) => {
+      recentJobs?.forEach((job: { providers: { business_name: string } | null; service_type: string; completed_date: string }) => {
         activities.push({
           type: "job",
           title: "Job Completed",

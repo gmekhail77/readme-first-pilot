@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { ProviderSidebar } from "@/components/provider/ProviderSidebar";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -176,9 +177,9 @@ export default function ProviderProfile() {
         .from("providers")
         .update({
           business_name: validatedData.businessName,
-          services: validatedData.services as any,
+          services: validatedData.services as Database["public"]["Enums"]["service_type"][],
           cities: validatedData.cities,
-          pricing_tier: validatedData.pricingTier as any,
+          pricing_tier: validatedData.pricingTier as Database["public"]["Enums"]["pricing_tier"],
           years_experience: validatedData.yearsExperience,
           insurance_verified: validatedData.insuranceVerified,
         })
@@ -203,7 +204,7 @@ export default function ProviderProfile() {
       
       // Refresh data
       await checkAuthAndFetchProfile();
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof z.ZodError) {
         const fieldErrors: Record<string, string> = {};
         error.issues.forEach((err) => {
