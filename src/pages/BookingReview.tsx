@@ -83,8 +83,29 @@ export default function BookingReview() {
   const remainingAmount = totalAmount * 0.5;
 
   const handleProceedToPayment = () => {
-    // TODO: Navigate to Stripe checkout
-    console.log('Proceeding to payment...', { customerInfo, provider, totalAmount });
+    // Prepare booking data for checkout
+    const checkoutParams = new URLSearchParams({
+      providerId: providerId || "",
+      propertyId: "temp-property-id", // TODO: Get from property creation
+      service: serviceType || "",
+      city: city || "",
+      total: totalAmount.toString(),
+      deposit: depositAmount.toString(),
+      tier: tier || "",
+      fullName: customerInfo.fullName,
+      email: customerInfo.email,
+      phone: customerInfo.phone,
+      address: customerInfo.address,
+    });
+
+    // Add service-specific details from searchParams
+    for (const [key, value] of searchParams.entries()) {
+      if (!['provider', 'service', 'city', 'total', 'tier'].includes(key)) {
+        checkoutParams.set(key, value);
+      }
+    }
+
+    navigate(`/booking/checkout?${checkoutParams.toString()}`);
   };
 
   const getServiceLabel = () => {
