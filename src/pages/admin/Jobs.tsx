@@ -188,7 +188,9 @@ export default function AdminJobs() {
 
     setActionLoading(true);
     try {
-      const updateData: { status: string; completed_date?: string } = { status: newStatus };
+      const updateData: { status: "cancelled" | "completed" | "confirmed" | "in_progress" | "paid" | "pending_deposit"; completed_date?: string } = { 
+        status: newStatus as "cancelled" | "completed" | "confirmed" | "in_progress" | "paid" | "pending_deposit"
+      };
 
       // Set completed_date if marking as completed
       if (newStatus === "completed") {
