@@ -359,12 +359,12 @@ export default function BookingReview() {
                     Please sign in or create an account to continue
                   </p>
                   <div className="flex gap-4 justify-center">
-                    <Link to="/auth/login">
+                    <Link to={`/auth?mode=login&redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`}>
                       <Button variant="outline" className="h-12 text-lg">
                         Sign In
                       </Button>
                     </Link>
-                    <Link to="/auth/signup">
+                    <Link to={`/auth?mode=signup&redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`}>
                       <Button className="h-12 text-lg bg-primary hover:bg-primary-hover">
                         Create Account
                       </Button>
