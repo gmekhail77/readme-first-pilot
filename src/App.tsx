@@ -14,6 +14,7 @@ import Pool from "./pages/Pool";
 import BookingReview from "./pages/BookingReview";
 import BookingCheckout from "./pages/BookingCheckout";
 import BookingConfirmation from "./pages/BookingConfirmation";
+import Auth from "./pages/auth/Auth";
 import NotFound from "./pages/NotFound";
 
 // Lazy loaded pages (admin & provider portals)
@@ -54,6 +55,11 @@ const App = () => (
             <Route path="/booking/review" element={<BookingReview />} />
             <Route path="/booking/checkout" element={<BookingCheckout />} />
             <Route path="/booking/confirmation" element={<BookingConfirmation />} />
+            
+            {/* Customer Auth Routes */}
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/auth/login" element={<Auth />} />
+            <Route path="/auth/signup" element={<Auth />} />
             <Route path="/provider/login" element={<ProviderLogin />} />
             <Route path="/provider/register" element={<ProviderRegister />} />
             <Route path="/provider/dashboard" element={<ProviderDashboard />} />
