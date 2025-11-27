@@ -9,7 +9,8 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Star, Award, DollarSign } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { ArrowLeft, Star, Award, DollarSign, Info } from 'lucide-react';
 import { calculateLandscapingPrice, type LandscapingQuoteInput } from '@/lib/pricing/landscaping';
 import { getTopProviders, type Provider } from '@/lib/matching/algorithm';
 import { formatCurrency } from '@/lib/utils/format';
@@ -257,9 +258,27 @@ export default function Landscaping() {
                 </CardHeader>
                 <CardContent>
                   <div className="bg-muted p-4 rounded-lg mb-4">
-                    <h4 className="font-semibold mb-2 text-lg">
-                      {budgetProviders[0].business_name}
-                    </h4>
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold text-lg">
+                        {budgetProviders[0].business_name}
+                      </h4>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Badge variant="secondary" className="text-sm gap-1">
+                              <Info size={14} />
+                              {budgetProviders[0].matchScore}% Match
+                            </Badge>
+                          </TooltipTrigger>
+                          <TooltipContent className="max-w-xs">
+                            <p className="text-sm">
+                              Match score based on location, rating, experience, and reviews. 
+                              {budgetProviders[0].years_experience} years experience with {budgetProviders[0].total_reviews || 0} reviews.
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
                     <div className="flex items-center gap-2 text-muted-foreground mb-2">
                       <Star size={18} className="fill-primary text-primary" />
                       <span className="text-lg">
@@ -274,7 +293,20 @@ export default function Landscaping() {
                       ))}
                     </div>
                   </div>
-                  <Button className="w-full h-12 text-lg bg-primary hover:bg-primary-hover">
+                  <Button 
+                    className="w-full h-12 text-lg bg-primary hover:bg-primary-hover"
+                    onClick={() => {
+                      const params = new URLSearchParams({
+                        provider: budgetProviders[0].id,
+                        service: 'landscaping',
+                        city: selectedCity,
+                        total: budgetPrice.total.toString(),
+                        tier: 'budget',
+                        details: JSON.stringify(formData),
+                      });
+                      window.location.href = `/booking/review?${params.toString()}`;
+                    }}
+                  >
                     Select Provider
                   </Button>
                 </CardContent>
@@ -297,9 +329,27 @@ export default function Landscaping() {
                 </CardHeader>
                 <CardContent>
                   <div className="bg-muted p-4 rounded-lg mb-4">
-                    <h4 className="font-semibold mb-2 text-lg">
-                      {standardProviders[0].business_name}
-                    </h4>
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold text-lg">
+                        {standardProviders[0].business_name}
+                      </h4>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Badge variant="secondary" className="text-sm gap-1">
+                              <Info size={14} />
+                              {standardProviders[0].matchScore}% Match
+                            </Badge>
+                          </TooltipTrigger>
+                          <TooltipContent className="max-w-xs">
+                            <p className="text-sm">
+                              Match score based on location, rating, experience, and reviews. 
+                              {standardProviders[0].years_experience} years experience with {standardProviders[0].total_reviews || 0} reviews.
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
                     <div className="flex items-center gap-2 text-muted-foreground mb-2">
                       <Star size={18} className="fill-primary text-primary" />
                       <span className="text-lg">
@@ -314,7 +364,20 @@ export default function Landscaping() {
                       ))}
                     </div>
                   </div>
-                  <Button className="w-full h-12 text-lg bg-primary hover:bg-primary-hover">
+                  <Button 
+                    className="w-full h-12 text-lg bg-primary hover:bg-primary-hover"
+                    onClick={() => {
+                      const params = new URLSearchParams({
+                        provider: standardProviders[0].id,
+                        service: 'landscaping',
+                        city: selectedCity,
+                        total: standardPrice.total.toString(),
+                        tier: 'standard',
+                        details: JSON.stringify(formData),
+                      });
+                      window.location.href = `/booking/review?${params.toString()}`;
+                    }}
+                  >
                     Select Provider
                   </Button>
                 </CardContent>
@@ -337,9 +400,27 @@ export default function Landscaping() {
                 </CardHeader>
                 <CardContent>
                   <div className="bg-muted p-4 rounded-lg mb-4">
-                    <h4 className="font-semibold mb-2 text-lg">
-                      {premiumProviders[0].business_name}
-                    </h4>
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold text-lg">
+                        {premiumProviders[0].business_name}
+                      </h4>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Badge variant="secondary" className="text-sm gap-1">
+                              <Info size={14} />
+                              {premiumProviders[0].matchScore}% Match
+                            </Badge>
+                          </TooltipTrigger>
+                          <TooltipContent className="max-w-xs">
+                            <p className="text-sm">
+                              Match score based on location, rating, experience, and reviews. 
+                              {premiumProviders[0].years_experience} years experience with {premiumProviders[0].total_reviews || 0} reviews.
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
                     <div className="flex items-center gap-2 text-muted-foreground mb-2">
                       <Star size={18} className="fill-primary text-primary" />
                       <span className="text-lg">
@@ -354,7 +435,20 @@ export default function Landscaping() {
                       ))}
                     </div>
                   </div>
-                  <Button className="w-full h-12 text-lg bg-primary hover:bg-primary-hover">
+                  <Button 
+                    className="w-full h-12 text-lg bg-primary hover:bg-primary-hover"
+                    onClick={() => {
+                      const params = new URLSearchParams({
+                        provider: premiumProviders[0].id,
+                        service: 'landscaping',
+                        city: selectedCity,
+                        total: premiumPrice.total.toString(),
+                        tier: 'premium',
+                        details: JSON.stringify(formData),
+                      });
+                      window.location.href = `/booking/review?${params.toString()}`;
+                    }}
+                  >
                     Select Provider
                   </Button>
                 </CardContent>

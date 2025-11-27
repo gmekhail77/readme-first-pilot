@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Cleaning from "./pages/Cleaning";
 import Landscaping from "./pages/Landscaping";
 import Pool from "./pages/Pool";
+import BookingReview from "./pages/BookingReview";
 import ProviderLogin from "./pages/provider/Login";
 import ProviderRegister from "./pages/provider/Register";
 import NotFound from "./pages/NotFound";
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/cleaning" element={<Cleaning />} />
           <Route path="/landscaping" element={<Landscaping />} />
           <Route path="/pool" element={<Pool />} />
+          <Route path="/booking/review" element={<BookingReview />} />
           <Route path="/provider/login" element={<ProviderLogin />} />
           <Route path="/provider/register" element={<ProviderRegister />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
