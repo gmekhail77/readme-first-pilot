@@ -114,7 +114,9 @@ export default function JobDetail() {
     if (!job) return;
 
     try {
-      const updates: { status: string; completed_date?: string } = { status: newStatus };
+      const updates: { status: "cancelled" | "completed" | "confirmed" | "in_progress" | "paid" | "pending_deposit"; completed_date?: string } = { 
+        status: newStatus as "cancelled" | "completed" | "confirmed" | "in_progress" | "paid" | "pending_deposit"
+      };
       
       if (newStatus === "completed") {
         updates.completed_date = new Date().toISOString();
