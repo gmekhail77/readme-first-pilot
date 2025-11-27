@@ -99,11 +99,15 @@ serve(async (req) => {
         },
       ],
       mode: "payment",
+      payment_intent_data: {
+        setup_future_usage: "off_session", // Save payment method for completion payment
+      },
       success_url: `${req.headers.get("origin")}/booking/confirmation?job_id=${job.id}`,
       cancel_url: `${req.headers.get("origin")}/booking/review?${new URLSearchParams(body).toString()}`,
       metadata: {
         job_id: job.id,
         user_id: user.id,
+        type: "deposit",
       },
     });
 
