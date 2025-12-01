@@ -9,8 +9,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { ArrowLeft, Star, Award, DollarSign, Info } from 'lucide-react';
+import { ChevronLeft, Star, Award, DollarSign, Info } from 'lucide-react';
 import { calculatePoolPrice, type PoolQuoteInput } from '@/lib/pricing/pool';
+import Logo from '@/components/Logo';
 import { getTopProviders, type Provider } from '@/lib/matching/algorithm';
 import { formatCurrency } from '@/lib/utils/format';
 import { type City } from '@/lib/constants';
@@ -82,16 +83,26 @@ export default function Pool() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-primary text-primary-foreground py-6 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <Link to="/" className="inline-flex items-center gap-2 text-primary-foreground hover:underline mb-4">
-            <ArrowLeft size={20} />
-            Back to Home
+      <header className="border-b border-border py-4 px-4">
+        <div className="container mx-auto max-w-6xl flex items-center justify-between">
+          <Logo variant="horizontal" size="sm" />
+          <Link
+            to="/services"
+            className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ChevronLeft className="w-5 h-5" />
+            <span>Back</span>
           </Link>
-          <h1 className="text-4xl font-bold">Pool Service Quote</h1>
-          <p className="text-xl mt-2 opacity-90">Get instant pricing for professional pool maintenance</p>
         </div>
       </header>
+
+      {/* Page Title */}
+      <section className="bg-gradient-to-br from-warm-light/30 to-secondary/20 py-8 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <h1 className="text-3xl font-bold text-foreground">Pool Service</h1>
+          <p className="text-lg mt-2 text-muted-foreground">Get instant pricing for professional pool maintenance</p>
+        </div>
+      </section>
 
       <div className="container mx-auto max-w-6xl px-4 py-8">
         <div className="grid lg:grid-cols-2 gap-8">

@@ -8,6 +8,7 @@ import { Loader2 } from "lucide-react";
 
 // Eagerly loaded pages (customer-facing, accessed frequently)
 import Index from "./pages/Index";
+import Services from "./pages/Services";
 import Cleaning from "./pages/Cleaning";
 import Landscaping from "./pages/Landscaping";
 import Pool from "./pages/Pool";
@@ -49,6 +50,7 @@ const App = () => (
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/services" element={<Services />} />
             <Route path="/cleaning" element={<Cleaning />} />
             <Route path="/landscaping" element={<Landscaping />} />
             <Route path="/pool" element={<Pool />} />
