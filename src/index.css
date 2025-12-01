@@ -30,6 +30,11 @@ All colors MUST be HSL.
     --secondary-hover: 40 40% 65%;
     --secondary-light: 40 40% 95%;
 
+    /* Warm/Coral accent for icons and highlights */
+    --warm: 25 60% 55%;
+    --warm-foreground: 0 0% 100%;
+    --warm-light: 35 70% 65%;
+
     --muted: 210 20% 96%;
     --muted-foreground: 210 15% 50%;
 
@@ -83,6 +88,11 @@ All colors MUST be HSL.
     --secondary-foreground: 210 25% 10%;
     --secondary-hover: 40 40% 50%;
     --secondary-light: 40 40% 20%;
+
+    /* Warm/Coral in dark mode */
+    --warm: 25 60% 50%;
+    --warm-foreground: 0 0% 100%;
+    --warm-light: 35 70% 55%;
 
     --muted: 210 20% 20%;
     --muted-foreground: 210 15% 65%;
