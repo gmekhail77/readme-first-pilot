@@ -1,0 +1,4 @@
+business_name,city,service,rating,total_reviews,pricing_tier,status,phone,website,address,zip_code,place_id,latitude,longitude
+"Example Cleaning Service LLC",Gilbert,cleaning,4.8,127,standard,pending,(480) 555-0101,https://example-cleaning.com,"123 Main St, Gilbert, AZ 85234, USA",85234,ChIJxxxxxxxxxxxxxxxxxx1,33.3528,-111.789
+"Gilbert Maid Service",Gilbert,cleaning,4.9,203,premium,pending,(480) 555-0102,https://gilbertmaids.example.com,"456 Oak Ave, Gilbert, AZ 85233, USA",85233,ChIJxxxxxxxxxxxxxxxxxx2,33.3541,-111.792
+"Budget Clean AZ",Gilbert,cleaning,3.8,45,budget,pending,(480) 555-0103,,"789 Pine Rd, Gilbert, AZ 85296, USA",85296,ChIJxxxxxxxxxxxxxxxxxx3,33.3512,-111.785

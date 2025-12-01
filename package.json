@@ -8,7 +8,9 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "seed:providers": "npx ts-node --esm --project scripts/tsconfig.json scripts/seed-providers.ts",
+    "seed:providers:help": "npx ts-node --esm --project scripts/tsconfig.json scripts/seed-providers.ts --help"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -64,6 +66,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
+    "ts-node": "^10.9.2",
     "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^22.16.5",
     "@types/react": "^18.3.23",

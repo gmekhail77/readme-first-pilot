@@ -1,0 +1,10 @@
+# Ignore actual seeded data (contains real business information)
+providers-*.json
+providers-*.csv
+
+# Keep example files
+!example-*.json
+!example-*.csv
+
+# Ignore place ID cache (local deduplication)
+place-id-cache.json

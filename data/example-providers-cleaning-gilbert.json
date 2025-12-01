@@ -1,0 +1,102 @@
+{
+  "metadata": {
+    "generatedAt": "2024-12-01T12:00:00.000Z",
+    "service": "cleaning",
+    "city": "Gilbert",
+    "totalCount": 3,
+    "source": "GOOGLE_PLACES",
+    "_note": "This is an EXAMPLE file showing the expected output format. Real data will be generated when you run the seeding script."
+  },
+  "providers": [
+    {
+      "business_name": "Example Cleaning Service LLC",
+      "cities": ["Gilbert"],
+      "services": ["cleaning"],
+      "pricing_tier": "standard",
+      "years_experience": 0,
+      "insurance_verified": false,
+      "rating": 4.8,
+      "total_reviews": 127,
+      "status": "pending",
+      "_google_places": {
+        "place_id": "ChIJxxxxxxxxxxxxxxxxxx1",
+        "formatted_address": "123 Main St, Gilbert, AZ 85234, USA",
+        "phone": "(480) 555-0101",
+        "website": "https://example-cleaning.com",
+        "location": {
+          "lat": 33.3528,
+          "lng": -111.789
+        },
+        "types": [
+          "home_goods_store",
+          "point_of_interest",
+          "establishment"
+        ],
+        "google_maps_url": "https://maps.google.com/?cid=xxxxxxxxxxxxxxx"
+      },
+      "_parsed_zip": "85234",
+      "_source": "GOOGLE_PLACES",
+      "_auto_created": true
+    },
+    {
+      "business_name": "Gilbert Maid Service",
+      "cities": ["Gilbert"],
+      "services": ["cleaning"],
+      "pricing_tier": "premium",
+      "years_experience": 0,
+      "insurance_verified": false,
+      "rating": 4.9,
+      "total_reviews": 203,
+      "status": "pending",
+      "_google_places": {
+        "place_id": "ChIJxxxxxxxxxxxxxxxxxx2",
+        "formatted_address": "456 Oak Ave, Gilbert, AZ 85233, USA",
+        "phone": "(480) 555-0102",
+        "website": "https://gilbertmaids.example.com",
+        "location": {
+          "lat": 33.3541,
+          "lng": -111.792
+        },
+        "types": [
+          "cleaning_service",
+          "point_of_interest",
+          "establishment"
+        ],
+        "google_maps_url": "https://maps.google.com/?cid=xxxxxxxxxxxxxxx"
+      },
+      "_parsed_zip": "85233",
+      "_source": "GOOGLE_PLACES",
+      "_auto_created": true
+    },
+    {
+      "business_name": "Budget Clean AZ",
+      "cities": ["Gilbert"],
+      "services": ["cleaning"],
+      "pricing_tier": "budget",
+      "years_experience": 0,
+      "insurance_verified": false,
+      "rating": 3.8,
+      "total_reviews": 45,
+      "status": "pending",
+      "_google_places": {
+        "place_id": "ChIJxxxxxxxxxxxxxxxxxx3",
+        "formatted_address": "789 Pine Rd, Gilbert, AZ 85296, USA",
+        "phone": "(480) 555-0103",
+        "website": null,
+        "location": {
+          "lat": 33.3512,
+          "lng": -111.785
+        },
+        "types": [
+          "home_goods_store",
+          "point_of_interest",
+          "establishment"
+        ],
+        "google_maps_url": "https://maps.google.com/?cid=xxxxxxxxxxxxxxx"
+      },
+      "_parsed_zip": "85296",
+      "_source": "GOOGLE_PLACES",
+      "_auto_created": true
+    }
+  ]
+}
