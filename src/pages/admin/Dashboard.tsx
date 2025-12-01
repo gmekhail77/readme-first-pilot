@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Loader2, Users, Briefcase, DollarSign, MapPin, Clock } from "lucide-react";
+import { Loader2, Users, Briefcase, DollarSign, MapPin, Clock, Database } from "lucide-react";
 import { toast } from "sonner";
 import { formatCurrency, formatDateTime } from "@/lib/utils/format";
 import { Badge } from "@/components/ui/badge";
@@ -224,9 +224,15 @@ export default function AdminDashboard() {
               JobMatchAZ Platform Management
             </p>
           </div>
-          <Button variant="outline" onClick={handleSignOut} className="h-12 text-base">
-            Sign Out
-          </Button>
+          <div className="flex gap-3">
+            <Button variant="outline" onClick={() => navigate("/admin/seeding")} className="h-12 text-base">
+              <Database className="mr-2 h-5 w-5" />
+              Seed Providers
+            </Button>
+            <Button variant="outline" onClick={handleSignOut} className="h-12 text-base">
+              Sign Out
+            </Button>
+          </div>
         </div>
 
         {!stats ? (

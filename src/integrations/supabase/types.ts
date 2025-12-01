@@ -165,48 +165,63 @@ export type Database = {
       }
       providers: {
         Row: {
+          auto_created: boolean | null
           business_name: string
           cities: string[]
           created_at: string
           id: string
           insurance_verified: boolean
+          phone: string | null
+          place_id: string | null
           pricing_tier: Database["public"]["Enums"]["pricing_tier"]
           rating: number | null
           services: Database["public"]["Enums"]["service_type"][]
+          source: string | null
           status: Database["public"]["Enums"]["provider_status"]
           total_reviews: number | null
           updated_at: string
-          user_id: string
+          user_id: string | null
+          website: string | null
           years_experience: number
         }
         Insert: {
+          auto_created?: boolean | null
           business_name: string
           cities: string[]
           created_at?: string
           id?: string
           insurance_verified?: boolean
+          phone?: string | null
+          place_id?: string | null
           pricing_tier?: Database["public"]["Enums"]["pricing_tier"]
           rating?: number | null
           services: Database["public"]["Enums"]["service_type"][]
+          source?: string | null
           status?: Database["public"]["Enums"]["provider_status"]
           total_reviews?: number | null
           updated_at?: string
-          user_id: string
+          user_id?: string | null
+          website?: string | null
           years_experience?: number
         }
         Update: {
+          auto_created?: boolean | null
           business_name?: string
           cities?: string[]
           created_at?: string
           id?: string
           insurance_verified?: boolean
+          phone?: string | null
+          place_id?: string | null
           pricing_tier?: Database["public"]["Enums"]["pricing_tier"]
           rating?: number | null
           services?: Database["public"]["Enums"]["service_type"][]
+          source?: string | null
           status?: Database["public"]["Enums"]["provider_status"]
           total_reviews?: number | null
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
+          website?: string | null
           years_experience?: number
         }
         Relationships: [
