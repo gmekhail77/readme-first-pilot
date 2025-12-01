@@ -1,7 +1,7 @@
 /**
  * Google Places Provider Seeding Edge Function
  * 
- * This function seeds the providers table with real business data from Google Places API.
+ * This function seeds the providers table with real business data from Google Places API (New).
  * 
  * REQUIREMENTS:
  * - GOOGLE_PLACES_API_KEY secret must be configured in Lovable Cloud
@@ -34,22 +34,17 @@ interface RequestBody {
 }
 
 interface PlaceResult {
-  place_id: string;
-  name: string;
-  formatted_address: string;
+  id: string;
+  displayName?: { text: string };
+  formattedAddress?: string;
   rating?: number;
-  user_ratings_total?: number;
-  geometry: {
-    location: {
-      lat: number;
-      lng: number;
-    };
+  userRatingCount?: number;
+  nationalPhoneNumber?: string;
+  websiteUri?: string;
+  location?: {
+    latitude: number;
+    longitude: number;
   };
-}
-
-interface PlaceDetails {
-  formatted_phone_number?: string;
-  website?: string;
 }
 
 interface MappedProvider {
@@ -111,86 +106,78 @@ serve(async (req) => {
 
     console.log(`Fetching ${serviceType} providers in ${city}, ${state}...`);
 
-    // Build search query
-    const query = `${SERVICE_QUERIES[serviceType]} in ${city} ${state}`;
+    // Build search query for new Places API
+    const textQuery = `${SERVICE_QUERIES[serviceType]} in ${city} ${state}`;
     
-    // Fetch places from Google Places Text Search API
-    const searchUrl = new URL("https://maps.googleapis.com/maps/api/place/textsearch/json");
-    searchUrl.searchParams.append("query", query);
-    searchUrl.searchParams.append("key", googleApiKey);
+    // Use new Places API (New) - Text Search endpoint
+    const searchUrl = "https://places.googleapis.com/v1/places:searchText";
+    
+    // Field mask to specify what data we want back
+    const fieldMask = [
+      "places.id",
+      "places.displayName",
+      "places.formattedAddress",
+      "places.rating",
+      "places.userRatingCount",
+      "places.nationalPhoneNumber",
+      "places.websiteUri",
+      "places.location"
+    ].join(",");
 
-    const searchResponse = await fetch(searchUrl.toString());
-    const searchData = await searchResponse.json();
+    const searchResponse = await fetch(searchUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": googleApiKey,
+        "X-Goog-FieldMask": fieldMask,
+      },
+      body: JSON.stringify({
+        textQuery,
+        maxResultCount: 20, // Max 20 per request in new API
+      }),
+    });
 
-    if (searchData.status !== "OK" && searchData.status !== "ZERO_RESULTS") {
-      throw new Error(`Google Places API error: ${searchData.status} - ${searchData.error_message || "Unknown error"}`);
+    if (!searchResponse.ok) {
+      const errorData = await searchResponse.json();
+      throw new Error(
+        `Google Places API error: ${searchResponse.status} - ${errorData.error?.message || "Unknown error"}`
+      );
     }
 
-    if (searchData.status === "ZERO_RESULTS") {
+    const searchData = await searchResponse.json();
+    const places: PlaceResult[] = searchData.places || [];
+    
+    if (places.length === 0) {
       return new Response(
         JSON.stringify({ message: "No results found", providers: [] }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    const places: PlaceResult[] = searchData.results || [];
-    console.log(`Found ${places.length} places from initial search`);
+    console.log(`Found ${places.length} places from search`);
 
-    // Fetch place details for phone and website (batch to avoid rate limits)
-    const mappedProviders: MappedProvider[] = [];
-
-    for (const place of places.slice(0, 60)) { // Cap at 60 results
-      try {
-        // Fetch place details for additional info
-        const detailsUrl = new URL("https://maps.googleapis.com/maps/api/place/details/json");
-        detailsUrl.searchParams.append("place_id", place.place_id);
-        detailsUrl.searchParams.append("fields", "formatted_phone_number,website");
-        detailsUrl.searchParams.append("key", googleApiKey);
-
-        const detailsResponse = await fetch(detailsUrl.toString());
-        const detailsData = await detailsResponse.json();
-        const details: PlaceDetails = detailsData.result || {};
-
-        // Extract ZIP code from address
-        const zipCode = extractZipCode(place.formatted_address);
-
-        mappedProviders.push({
-          business_name: place.name,
-          cities: [city],
-          services: [serviceType],
-          rating: place.rating || null,
-          total_reviews: place.user_ratings_total || 0,
-          phone: details.formatted_phone_number || null,
-          website: details.website || null,
-          place_id: place.place_id,
-          source: "GOOGLE_PLACES",
-          auto_created: true,
-          status: "pending",
-          pricing_tier: "standard",
-          years_experience: 0,
-          insurance_verified: false,
-        });
-      } catch (detailError) {
-        console.error(`Error fetching details for place ${place.place_id}:`, detailError);
-        // Continue with limited data
-        mappedProviders.push({
-          business_name: place.name,
-          cities: [city],
-          services: [serviceType],
-          rating: place.rating || null,
-          total_reviews: place.user_ratings_total || 0,
-          phone: null,
-          website: null,
-          place_id: place.place_id,
-          source: "GOOGLE_PLACES",
-          auto_created: true,
-          status: "pending",
-          pricing_tier: "standard",
-          years_experience: 0,
-          insurance_verified: false,
-        });
-      }
-    }
+    // Map places to providers
+    const mappedProviders: MappedProvider[] = places.map((place) => {
+      const businessName = place.displayName?.text || "Unknown Business";
+      const address = place.formattedAddress || "";
+      
+      return {
+        business_name: businessName,
+        cities: [city],
+        services: [serviceType],
+        rating: place.rating || null,
+        total_reviews: place.userRatingCount || 0,
+        phone: place.nationalPhoneNumber || null,
+        website: place.websiteUri || null,
+        place_id: place.id,
+        source: "GOOGLE_PLACES",
+        auto_created: true,
+        status: "pending",
+        pricing_tier: "standard",
+        years_experience: 0,
+        insurance_verified: false,
+      };
+    });
 
     console.log(`Mapped ${mappedProviders.length} providers`);
 
