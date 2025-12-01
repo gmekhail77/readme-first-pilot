@@ -24,15 +24,20 @@ const PLACE_ID_CACHE_FILE = path.join(process.cwd(), 'data', 'place-id-cache.jso
  * Create an admin Supabase client using the service role key
  */
 export function createAdminClient(): SupabaseClient {
-  const supabaseUrl = process.env.SUPABASE_URL;
+  // Support both VITE_ prefixed (from .env) and non-prefixed env vars
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!supabaseUrl) {
-    throw new Error('SUPABASE_URL environment variable is not set');
+    throw new Error('SUPABASE_URL (or VITE_SUPABASE_URL) environment variable is not set');
   }
 
   if (!supabaseServiceKey) {
-    throw new Error('SUPABASE_SERVICE_ROLE_KEY environment variable is not set');
+    throw new Error(
+      'SUPABASE_SERVICE_ROLE_KEY environment variable is not set.\n' +
+      'This is different from the anon/publishable key.\n' +
+      'Find it at: Supabase Dashboard > Project Settings > API > service_role key'
+    );
   }
 
   return createClient(supabaseUrl, supabaseServiceKey, {
